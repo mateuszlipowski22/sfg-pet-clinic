@@ -1,6 +1,7 @@
 package guru.springframework.sfgpetclinic.bootstrap;
 
 import guru.springframework.sfgpetclinic.model.Owner;
+import guru.springframework.sfgpetclinic.model.Pet;
 import guru.springframework.sfgpetclinic.model.PetType;
 import guru.springframework.sfgpetclinic.model.Vet;
 import guru.springframework.sfgpetclinic.services.OwnerService;
@@ -9,6 +10,8 @@ import guru.springframework.sfgpetclinic.services.VetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -32,11 +35,11 @@ public class DataLoader implements CommandLineRunner {
 
         PetType dog=new PetType();
         dog.setName("Dog");
-        petTypeService.save(dog);
+        PetType savedDogPetTpe = petTypeService.save(dog);
 
         PetType cat=new PetType();
         cat.setName("Cat");
-        petTypeService.save(cat);
+        PetType savedCatPetTpe = petTypeService.save(cat);
 
         System.out.println("Loaded PetType.....");
 
@@ -47,14 +50,30 @@ public class DataLoader implements CommandLineRunner {
         owner1.setCity("Maiami");
         owner1.setTelephone("123123123");
 
+        Pet mikePet = new Pet();
+        mikePet.setPetType(savedDogPetTpe);
+        mikePet.setOwner(owner1);
+        mikePet.setBirthDate(LocalDate.now());
+        mikePet.setName("Rosco");
+
+        owner1.getPets().add(mikePet);
+
         ownerService.save(owner1);
 
         Owner owner2 = new Owner();
         owner2.setFirstName("Fiona");
         owner2.setLastName("Glenanna");
-        owner2.setAddress("123 Bristol");
+        owner2.setAddress("123 Bristwol");
         owner2.setCity("Maiami");
         owner2.setTelephone("123123123");
+
+        Pet fionaPet = new Pet();
+        fionaPet.setPetType(savedCatPetTpe);
+        fionaPet.setOwner(owner2);
+        fionaPet.setBirthDate(LocalDate.now());
+        fionaPet.setName("Buzzco");
+
+        owner2.getPets().add(fionaPet);
 
         ownerService.save(owner2);
 
